@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PublicUserProfile;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(config('fortify.home'));
+});
+
+
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
+    Route::get('/sent', [DashboardController::class, 'sentWishes'])->name('sent');
+    Route::get('/show-wish/{wish}', [DashboardController::class, 'showWish'])->name('show-wish');
+
+    Route::group(['prefix' => '/u', 'as' => 'user.'], function () {
+        Route::get('/{user:username}', [PublicUserProfile::class, 'show'])->name('public-profile');
+        Route::get('/{user:username}/new', [PublicUserProfile::class, 'showNew'])->name('public-profile.new');
+    });
 });

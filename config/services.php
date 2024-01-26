@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'quotes' => [
+        'base_url' => env('QUOTES_SERVICE_BASE_URL'),
+        'secret' => env('QUOTES_SERVICE_SECRET'),
+    ],
+
 ];
